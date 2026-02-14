@@ -1,0 +1,20 @@
+---
+- name: Deploying LEMP-stack
+  hosts: all
+  become: yes
+
+  vars:
+    project_root: "/var/www"
+    project_name: "php-blog"
+
+  pre_tasks:
+    - name: Install ACL package
+      ansible.builtin.apt:
+        name: acl
+        state: present
+
+  roles:
+    # - git-clone
+    #- nginx
+    #- mysql
+    - php

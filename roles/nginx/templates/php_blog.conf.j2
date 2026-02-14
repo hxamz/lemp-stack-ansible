@@ -1,0 +1,36 @@
+server {
+    listen 80;
+    server_name {{ ansible_nodename }};
+    server_tokens off;
+
+    root {{ project_root }}/{{ project_name }}
+    index index.php
+
+    client_max_body_size 10M;
+    client_body_timeout: 10s;
+    client_header_timeout: 10s;
+
+    gzip on;
+    gzip_types text/plain application/json text/xml;
+    gzip_min_length 1000;
+
+    # Denying access to sensitive data
+    location ~* \.(db|ini|sql|log|class\.php)$ {
+        deny all;
+        return 404; # Hiding fact of file existing
+    }
+
+    # Denying access to Docker files and .md files
+    location ~* ^/(\.|Dockerfile|docker-compose\.yml|README\.md) {
+        deny all;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock; # Проверьте путь к сокету!
+        
+        # Передача параметров PHP (некоторые сборки поддерживают fastcgi_param PHP_VALUE)
+        # Но надежнее настроить это в php.ini
+    }
+
+}

@@ -1,0 +1,30 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for git-clone
+
+- name: Consider www-data group exists
+  ansible.builtin.group:
+    name: www-data
+    state: present
+
+- name: Consider www-data user exists
+  ansible.builtin.user:
+    name: www-data
+    group: www-data
+    system: yes
+    shell: /usr/sbin/nologin
+    state: present
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ project_root }}/{{ project_name }}"
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: Clone repository
+  ansible.builtin.git:
+    repo: https://github.com/m1k1o/blog.git
+    dest: "{{ project_root }}/{{ project_name }}"
+    force: true
+  become_user: www-data
