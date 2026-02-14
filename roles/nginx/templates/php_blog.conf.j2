@@ -1,14 +1,14 @@
 server {
     listen 80;
-    server_name {{ ansible_nodename }};
+    server_name {{ ansible_facts['nodename'] }};
     server_tokens off;
 
-    root {{ project_root }}/{{ project_name }}
-    index index.php
+    root {{ project_root }}/{{ project_name }};
+    index index.php;
 
-    client_max_body_size 10M;
-    client_body_timeout: 10s;
-    client_header_timeout: 10s;
+    client_max_body_size 11M;
+    client_body_timeout 10s;
+    client_header_timeout 10s;
 
     gzip on;
     gzip_types text/plain application/json text/xml;
@@ -27,10 +27,10 @@ server {
 
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock; # Проверьте путь к сокету!
-        
-        # Передача параметров PHP (некоторые сборки поддерживают fastcgi_param PHP_VALUE)
-        # Но надежнее настроить это в php.ini
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
     }
 
 }

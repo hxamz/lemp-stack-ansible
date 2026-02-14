@@ -9,5 +9,31 @@
       - nginx
     state: present
 
-- name: 
-    
+- name: Copy configuration from template
+  ansible.builtin.template:
+    src: php_blog.conf.j2
+    dest: /etc/nginx/sites-available/php_blog.conf
+    owner: www-data
+    group: www-data
+    mode: 0755
+  register: config_copied
+  
+- name: Creating configuration symlink
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/php_blog.conf
+    dest: /etc/nginx/sites-enabled/php_blog
+    owner: www-data
+    group: www-data
+    state: link
+
+- name: Deleting default symlink
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+    enabled: yes
+  when: "config_copied.changed"

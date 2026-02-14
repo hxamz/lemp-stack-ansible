@@ -15,6 +15,6 @@
 
   roles:
     # - git-clone
-    #- nginx
+    - nginx
     #- mysql
-    - php
+    # - php
