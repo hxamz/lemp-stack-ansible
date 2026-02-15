@@ -43,6 +43,8 @@
       - php7.4-json
       - php7.4-common
       - php7.4-mysql
+      - php7.4-curl
+      - php7.4-gd
     state: present
     update_cache: true
 

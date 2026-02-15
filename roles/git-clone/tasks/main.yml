@@ -28,3 +28,11 @@
     dest: "{{ project_root }}/{{ project_name }}"
     force: true
   become_user: www-data
+  
+- name: Copy config.ini from template
+  ansible.builtin.template:
+    src: config.ini.j2
+    dest: "{{ project_root }}/{{ project_name }}/config.ini"
+    owner: www-data
+    group: www-data
+    mode: 0755

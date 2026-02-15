@@ -14,7 +14,7 @@
         state: present
 
   roles:
-    # - git-clone
+    - git-clone
+    - php
+    - mariadb
     - nginx
-    #- mysql
-    # - php
