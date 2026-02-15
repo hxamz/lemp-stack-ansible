@@ -1,4 +1,4 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # tasks file for php
 
@@ -13,26 +13,26 @@
     state: present
 
 - name: Install old PHP repository for Ubuntu 24.04
+  when: ansible_facts["distribution"] == "Ubuntu"
   block:
     - name: Add PHP repository in Ubuntu
-      ansible.builtin.shell: "add-apt-repository -y ppa:ondrej/php"
-      register: ppa_result
-      changed_when: "'Found existing deb entry' not in ppa_result.stdout"
-  when: ansible_facts["distribution"] == "Ubuntu"
+      ansible.builtin.command: "add-apt-repository -y ppa:ondrej/php"
+      register: php_ppa_result
+      changed_when: "'Found existing deb entry' not in php_ppa_result.stdout"
 
 - name: Install old PHP repository for Debian 12
+  when: ansible_facts["distribution"] == "Debian"
   block:
     - name: Download PHP repository via HTTPS
       ansible.builtin.get_url:
         url: https://packages.sury.org/php/README.txt
         dest: /home/{{ ansible_user }}/php7.4-install.sh
-        mode: 0744
+        mode: "0744"
 
     - name: Install PHP repo from script
-      ansible.builtin.shell: "/home/{{ ansible_user }}/php7.4-install.sh"
+      ansible.builtin.command: "/home/{{ ansible_user }}/php7.4-install.sh"
       args:
         creates: /etc/apt/sources.list.d/php.list
-  when: ansible_facts["distribution"] == "Debian"
 
 - name: Install PHP packages
   ansible.builtin.apt:
@@ -52,4 +52,4 @@
   ansible.builtin.service:
     name: php7.4-fpm
     state: started
-    enabled: yes
+    enabled: true

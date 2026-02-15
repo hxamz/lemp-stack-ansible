@@ -1,7 +1,7 @@
 ---
 - name: Deploying LEMP-stack
   hosts: all
-  become: yes
+  become: true
 
   vars:
     project_root: "/var/www"

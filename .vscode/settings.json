@@ -1,0 +1,6 @@
+{
+    "ansible.python.interpreterPath": "/usr/bin/python",
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/vars.json": "file:///home/rm/ansible/lemp_stack/group_vars/all.yml"
+    }
+}

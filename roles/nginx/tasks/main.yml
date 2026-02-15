@@ -1,12 +1,11 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # tasks file for nginx
 
 - name: Install nginx
   ansible.builtin.apt:
-    update_cache: yes
-    name:
-      - nginx
+    update_cache: true
+    name: nginx
     state: present
 
 - name: Copy configuration from template
@@ -15,9 +14,9 @@
     dest: /etc/nginx/sites-available/php_blog.conf
     owner: www-data
     group: www-data
-    mode: 0755
-  register: config_copied
-  
+    mode: "0755"
+  notify: Reload nginx
+
 - name: Creating configuration symlink
   ansible.builtin.file:
     src: /etc/nginx/sites-available/php_blog.conf
@@ -30,10 +29,3 @@
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
-
-- name: Reload nginx
-  ansible.builtin.service:
-    name: nginx
-    state: reloaded
-    enabled: yes
-  when: "config_copied.changed"
